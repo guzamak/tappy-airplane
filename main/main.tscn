@@ -1,0 +1,124 @@
+[gd_scene load_steps=8 format=3 uid="uid://da5l8bub84bj5"]
+
+[ext_resource type="Script" path="res://main/main.gd" id="1_5de24"]
+[ext_resource type="Texture2D" uid="uid://det6oil0pxftv" path="res://assets/background/sky.png" id="1_uyim1"]
+[ext_resource type="FontFile" uid="uid://w8gffpusjlpl" path="res://assets/fonts/LuckiestGuy-Regular.ttf" id="3_s5521"]
+[ext_resource type="AudioStream" uid="uid://cy882ydpolsd" path="res://assets/audio/bgm_menu.mp3" id="4_j770j"]
+
+[sub_resource type="Animation" id="Animation_u1lo4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/PressSpaceLabel:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ydjls"]
+resource_name = "wip wup"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/PressSpaceLabel:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.45843, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_10h10"]
+_data = {
+"RESET": SubResource("Animation_u1lo4"),
+"wip wup": SubResource("Animation_ydjls")
+}
+
+[node name="main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5de24")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_uyim1")
+expand_mode = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 24
+
+[node name="TappyPlaneLabel" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 0.345098, 0.278431, 1)
+theme_override_fonts/font = ExtResource("3_s5521")
+theme_override_font_sizes/font_size = 72
+text = "TAPPY
+ PLANE"
+horizontal_alignment = 1
+
+[node name="PressSpaceLabel" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.470588, 0.639216, 1, 1)
+theme_override_constants/outline_size = 15
+theme_override_fonts/font = ExtResource("3_s5521")
+theme_override_font_sizes/font_size = 48
+text = "PRESS SPACE
+TO  START"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.996094, 0.34375, 0.277344, 1)
+theme_override_fonts/font = ExtResource("3_s5521")
+text = "HIGHSCORE"
+
+[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.996094, 0.34375, 0.277344, 1)
+theme_override_fonts/font = ExtResource("3_s5521")
+text = "000"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "wip wup"
+libraries = {
+"": SubResource("AnimationLibrary_10h10")
+}
+
+[node name="MenuMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_j770j")
+autoplay = true

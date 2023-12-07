@@ -1,0 +1,130 @@
+[gd_scene load_steps=11 format=3 uid="uid://btofeka1f8mmk"]
+
+[ext_resource type="Texture2D" uid="uid://canwbjq7bwou7" path="res://assets/plane/planes_sheet.png" id="1_42dqr"]
+
+[sub_resource type="GDScript" id="GDScript_v0nrj"]
+script/source = "extends CharacterBody2D
+
+
+@onready var animplayer = $AnimationPlayer 
+@onready var animspirte = $AnimatedSprite2D
+var gavity = 300 
+var power  = 100
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _physics_process(delta):
+	
+	velocity.y += delta * gavity
+	
+	fly()
+	
+	if is_on_floor():
+		die()
+	#physic function
+	move_and_slide() 
+	
+
+func fly():
+	if Input.is_action_just_pressed(\"fly\"):
+		velocity.y -= power
+		animplayer.play(\"fly\")
+
+func die():
+	animspirte.stop()
+	#signal use for other element
+	GameMange.on_game_over.emit()
+	#stop all event
+	set_physics_process(false)
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t1heh"]
+atlas = ExtResource("1_42dqr")
+region = Rect2(0, 0, 88, 73)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_npwvh"]
+atlas = ExtResource("1_42dqr")
+region = Rect2(88, 0, 88, 73)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b3w17"]
+atlas = ExtResource("1_42dqr")
+region = Rect2(176, 0, 88, 73)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bphwt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t1heh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_npwvh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b3w17")
+}],
+"loop": true,
+"name": &"Fly",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_oq3ou"]
+radius = 41.0
+
+[sub_resource type="Animation" id="Animation_l3yen"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_ohd4u"]
+resource_name = "fly"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -0.349066, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_c6yh0"]
+_data = {
+"RESET": SubResource("Animation_l3yen"),
+"fly": SubResource("Animation_ohd4u")
+}
+
+[node name="PlaneCB" type="CharacterBody2D" groups=["Plane"]]
+script = SubResource("GDScript_v0nrj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_bphwt")
+animation = &"Fly"
+autoplay = "Fly"
+frame = 2
+frame_progress = 0.688888
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_oq3ou")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../CollisionShape2D")
+libraries = {
+"": SubResource("AnimationLibrary_c6yh0")
+}

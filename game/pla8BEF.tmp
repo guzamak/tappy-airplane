@@ -1,0 +1,74 @@
+[gd_scene load_steps=8 format=3 uid="uid://btofeka1f8mmk"]
+
+[ext_resource type="Texture2D" uid="uid://canwbjq7bwou7" path="res://assets/plane/planes_sheet.png" id="1_42dqr"]
+
+[sub_resource type="GDScript" id="GDScript_v0nrj"]
+script/source = "extends CharacterBody2D
+
+
+var gavity = 300 
+var power  = 100
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _physics_process(delta):
+	
+	
+
+	velocity.y += delta * gavity
+	
+	if Input.is_action_just_pressed(\"fly\"):
+		velocity.y -= power
+		angle(45)
+	#physic function
+	move_and_slide() 
+	
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t1heh"]
+atlas = ExtResource("1_42dqr")
+region = Rect2(0, 0, 88, 73)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_npwvh"]
+atlas = ExtResource("1_42dqr")
+region = Rect2(88, 0, 88, 73)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b3w17"]
+atlas = ExtResource("1_42dqr")
+region = Rect2(176, 0, 88, 73)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bphwt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t1heh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_npwvh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b3w17")
+}],
+"loop": true,
+"name": &"Fly",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_oq3ou"]
+radius = 41.0
+
+[node name="PlaneCB" type="CharacterBody2D"]
+script = SubResource("GDScript_v0nrj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_bphwt")
+animation = &"Fly"
+autoplay = "Fly"
+frame = 2
+frame_progress = 0.688888
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_oq3ou")
