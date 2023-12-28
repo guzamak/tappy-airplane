@@ -13,6 +13,7 @@ extends Node2D
 func _ready():
 	GameMange.on_game_over.connect(on_game_over)
 	spawpipes()
+	GameMange.resetscore()
 	emg_ine_sound.play()
 
 
